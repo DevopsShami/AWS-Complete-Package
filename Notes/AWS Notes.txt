@@ -1,0 +1,202 @@
+What is Cloud ?
+
+AWS IAM (Identity and Access Management ) Deep Dive :  https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html
+
+Authenticated and Authorization 
+
+AWS Account
+Root access -> Access to all service in AWS ,If something error happen everything will be ruined , To resolve this issue AWS come up with solution to avoid problem called IAM which gives Authentication and Authorization . 
+
+   IAM 
+        Users : created user, Authentication,
+		Policies : Attaching policies , 
+		Groups : Groups is needed because to imrove the efficiency, 
+		          Users are added to particular groups,like ,developrs,testers etc .
+		Roles : Role will have account but temporary,  are talking to one service to another .
+		
+ EC2 - Elastic Cloud Compute
+     Compute - AWS to provide Virtual Server like CPU,RAM.Disk 
+	 hipervisor .
+	 Cloud : Cloud Compute instance 
+	 Elastic : Prefix , Whenever AWS Provides service that can be scaled up or Scaled Down ,Increase or Decrease the resources.
+	 
+	 why ? -> Without ec2 you have to have your own server and you have to do Timely upgrade,security issues and in order to decrease Management efforts , Amazon come up with solution called public cloud ec2 instance.
+	 
+	   Types : 1) General purpose
+	           2) Compute Optimized
+			   3) Memory Optimized
+			   4) Storage Optimized
+			   5) Accelarated
+			   
+		We will be using General purpose ec2. 
+
+AWS will use CLI and will price you accordingly. 
+Region : AWS has multiple data centers in Different part of the word.
+Availabality zone : In a country they have data centers in  multiple area they are called as Availability zones.
+Latance : Request will take time to reach application and server and reach back to application 
+
+Create EC2 Instance :  https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html
+
+  Go to Create ec2 instance 
+  Name of the Instances 
+  Application and OS image : Choosing opertaing system . 
+  Select instance type : Choosing memory and stuff
+  Key Value pair : Combination of public and Private key whcich we use for login to specific instance . and do not share this keypair secret. 
+  use .pem file for connecting to MobaXterm and .pemp for Putty
+  
+ * How to run Instance on Terminal ?
+  
+ Like putty, Moba Xterm 
+ Steps to connect ec2 to Terminal 
+ ssh -i <.pem file> ubuntu@ip address of instance
+ you will get permission denied error, to resolve 
+ chmod 666 .pem then you will get permission
+run -> ssh -i <.pem file> ubuntu@ip address of instance
+ls -ltr
+
+ ** Install Jenkins on AWS ec2 and getting acces with Browser
+  go to jenkins , Before installing jenkins install java in ec2
+  * sudo apt install openjdk-11-jdk
+  java --version
+  copy paste from install jenkins website.
+  stemctl status jenkins ->To know status of Jenkins on ec2
+  by default port will be 8080
+  copy ip of ec2 
+  then go to security of ec2 and inbound traffic and edit inbound , custom  , allow  port. 
+  Goto browser copy ip and port .
+  
+  inbound:Request coming inside
+  outbound : Request going outside
+  
+ * Login / Getting access to MobaXterm from windows machines.
+ 
+ Access EC2 
+  - Launch Instance (Create Instance)
+  -Open MobaXterm -
+    Go to sessions -> ssh - Remot host(ip address) -> Specify username =ubuntu -> Advanced SSH Settings -Select use private key , click ok and Accept. then sudo apt update. 
+	
+	
+Virtual Private Cloud (VPC) :  https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
+   
+   AWS Devops engineer are responsible for configuration of VP.
+	 
+	 How do you define size of VPC ? 
+	       There is term called IP Address range ,
+		   VPC is created with IP Address and Devops engineers Inside vpc there will be multiple projects so Devops will split IP Address this is called Subnets. 
+		   Gateway : pass for someone to enter VPC. 
+		   Freespace in Subnet
+		   public subnets : Public subnet is one which user will access inside the VPC. connects using Internet gateway.
+		   Load Balancer : Is the one which forword the Request depending upon the load.
+		   Route Table : Describes how request should go to Application from Load Balancer.
+		   Security Group : 
+		   
+		   Internet gateway -> Public Subnet -> Elastic Load Balancer -> Request connects to Subnet Through Route Tables ->Security Groups 
+		   
+		   NACL ->
+		   
+		   NAT ->Masking of Public Ip Address called NAD Gatway .It is helping to download from internet.and it is connected in public subnet .
+		   
+	Vpc Introduces virtual cloud in the world of public cloud and lots of Security. 
+
+Security groups and NACL which adds extra security for VPC : 
+	
+* When you create VPC you define range of IP adress	which defines size of your VPC.
+
+* Organization will check for how secure the server is 
+ 
+ So AWS is 
+      Add  <- Shared responsiblity
+        |
+		|
+		VPC - SG ->NACL +API and Security groups  will be aaded by Devops and System Administarator
+		
+	NACL Is the last point of security	
+	
+Security Group :
+         *It is Instance Level 
+          * By default
+          * rules to be set for allow. 		  
+
+    Inbound Traffic :  User who is try ing to acces website is called Inbound 
+    Outbound Traffic : website is try ing to acces website other site  is called outbound .
+	port 25 :is a mailing port so it blocks outbond activity.
+	
+	NACL : Network Access Control List
+	https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html
+	is applied at subnet level . with this devops engcan play major activity. 
+	* It is at subnet level. to filter what kind of ip address to allow  i e define their organization level network traffic.
+     * Acts as additional level security. 
+     	 
+  
+ 
+ Route 53 on AWS : provides DNS As service
+ 
+ DNS :Domain Naming System 
+ what DNS? - Something that we keep using ,  ex amazon.com is assigned with ip adress, but we never use io address, we use domain names ,eventually use ip address, DNS is the one that  maps your ip address with domain name .In real world basically dns resolves domain name to load balancer ip address. 
+ 
+ load balancer gives ip address, you cannot give ip address, but remembering ip address is difficult to remember, and ip address can change at anytime.
+ 
+Route 53 - Domain Registaration 
+         -purchase or integrate with AWS
+		 - Hosted Zones
+		 - DNS Records
+		 Route 53 also do health checks 
+
+https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html
+
+
+ AWS Project Used in Production : 
+ 
+ About Project :
+  
+  How to create a VPC that you can use for servers in Production environment .
+  
+  To improve resilience, you deploy the servers in two availabality zones,by using an auto scaling group and application load balancer, For additional security, you deploy the servers in private subnets,The servers receive requests through the load balancer. the servers can connect to the internet by using a NAT gateway. To imrove resiliency,you deploy the NAT gateway in both Availabality zones. 
+  
+  Overview 
+  
+  The VPC has public subnets and private subnets in two avalilabality zones.
+  
+  Each public subnet contains a NAT gateway and a load balancer node.
+  
+  The server run in private subnets, are launched and terminated by using an auto scaling group and recieves traffic from the load balancer.
+  
+  The servers can connect to the internet by using the NAT gatway.
+  
+  Before we start :
+  
+  Auto Scaling Group : 
+  Load Balancer :
+  Target group :
+  Bastion Host or Jump Server : 
+  
+  Elastic IP Address :Is called as static ip address
+  
+  
+  
+
+  
+ 
+ 
+  
+  
+
+ 
+
+
+ 
+ 
+  
+  
+  
+  
+  
+  
+		
+	
+	
+  
+  
+
+
+

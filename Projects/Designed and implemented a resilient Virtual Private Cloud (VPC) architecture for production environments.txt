@@ -1,0 +1,9 @@
+Experience in Cloud Architecture:
+
+1) Designed and implemented a resilient Virtual Private Cloud (VPC) architecture for production environments:
+ - Created a VPC with both public and private subnets across two availability zones to enhance fault tolerance.
+ - Configured an Auto Scaling group to launch and terminate servers in private subnets, ensuring scalable and highly available infrastructure.
+ - Deployed an Application Load Balancer in public subnets to distribute traffic across servers in private subnets.
+ - Implemented NAT gateways in each availability zone to provide secure internet access for servers in private subnets.
+ - Ensured high availability by deploying the load balancer and NAT gateways across multiple availability zones.
+ - Enhanced security by restricting direct internet access to servers and using the load balancer as the main entry point for inbound traffic.
